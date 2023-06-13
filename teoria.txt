@@ -1,0 +1,11 @@
+!!! USER MANAGEMENT !!!.-
+1) Debemos instalar un bundle el que nos va a permitir securizar nuestra app, este bundle es:
+  - composer require symfony/security-bundle.
+
+2) Este nos genera un archivo gracias a flex, dentro de config/packages/security.yaml, donde aquí es donde podemos nosotros empezar a securizar nuestra app.
+
+3) Creamos nuestra entidad User, gracias al bundle maker, este bundle nos permite automatizar la creación de ciertos elementos, lógicas en nuestra app. Al lanzar el comando este configura gracias a flex ciertas cosas en nuestro security.yaml, y coloca en el provider que entidad y que propiedad usaremos para la obtención de usuarios en este caso escpgimos email.
+  - bin/console make:user
+
+4)
+  
