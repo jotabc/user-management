@@ -21,6 +21,9 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            form_login:
+                login_path: /login
+                check_path: /login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -33,7 +36,7 @@ security:
     # Define los niveles o requerimientos de acceso para acceder a las diffs rutas de nuestra app.
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
     security:

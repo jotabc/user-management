@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form action="" method="post">
+        <label for="username">Email:</label>
+        <input type="text" id="username" name="_username" value="{{ last_username }}" />
+
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="_password" />
+
+        {# si queremos que despues de hacer login vaya a otra ruta podemos hacer lo sig 
+            <input type="hidden" name="_target_path" value="/acccount/" /> #}
+
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}

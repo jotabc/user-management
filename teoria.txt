@@ -5,7 +5,32 @@
 2) Este nos genera un archivo gracias a flex, dentro de config/packages/security.yaml, donde aquí es donde podemos nosotros empezar a securizar nuestra app.
 
 3) Creamos nuestra entidad User, gracias al bundle maker, este bundle nos permite automatizar la creación de ciertos elementos, lógicas en nuestra app. Al lanzar el comando este configura gracias a flex ciertas cosas en nuestro security.yaml, y coloca en el provider que entidad y que propiedad usaremos para la obtención de usuarios en este caso escpgimos email.
-  - bin/console make:user
+  - bin/console make:user Este crea una tabla user con el role User por defecto.
 
-4)
+4) Generar la migración una vez hecha la conexion con el db.
+5) Crear usuarios, podemos hacerlo con los data fixtures que nos provee symfony 
+   - composer require --dev doctrine/doctrine-fixtures-bundle => --dev dependencia de desarrollo.
+   Este comando crear una carpeta dentro de src llamada DataFixture con un archivin AppFixtures.php ahí dentro podemos nosotros generar el usuarios que queremos.
+   ver ejm en DataFixture/AppFixtures.php
+
+6) Luego para poder nosotros ejecutar esta fixture debemos de lanzar el sig comando:
+    - bin/console doctrine:fixtures:load.
+    Por defecto este purga la base de datos existe un comando para que no purge la base de datos completa.
+
+7) Creamos o probamos este usuario creando el form de login usando maker bundle ejm:
+    - bin/console make:controller login  Ver ejm Controller/LoginController.php
+
+8) si queremos usar twig podemos instalarlo de la sug manera:
+   - composer require template ver ejm templates/login/index.html.twig
+
+9) En nustro security.yaml debemos de indicar en el firewall main vamos a definir como los usuarios se autentican en nuestra app.
+    form_login:
+      login_path: login
+      check_path: login
+
+10) Podemos usar si queremos el symfony profile nos permite inspeccionar la request, mejor errores etc.
+    - composer require --dev symfony/profiler-pack
+
+  Cuando iniciamos sessión nos genera una coockie
+   
   
