@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Profile</h1>
+    {# metodo magico app que accede al usuario logeado #}
+    <p>{{ app.user.email }} </p>
+    <p>
+        <a href="{{ path('app_logout') }}">
+            Cerrar Sesión
+        </a>
+    </p>
+{% endblock %}

@@ -32,5 +32,16 @@
     - composer require --dev symfony/profiler-pack
 
   Cuando iniciamos sessión nos genera una coockie
+
+Logout.- PAsos:
+1) Creamos en nuestro security firewall main colocamos la opción logout con el path app_logout
+  main:
+    logout:
+      path: app_logout
+
+2) Creamos el controlador encargado de el cierre de session. (LogoutController.php)
+3) Podemos ya crear un form de registro con el comando maker para esto necesitamos instalar un validador  de forms que nos pide Symfony:
+   - composer require form validator => validador
+   - bin/console make:registration-form => bundle
    
   
