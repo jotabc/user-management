@@ -13,7 +13,7 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
-        #firewalls => define las formas de autenticarse dentro de las rutas de nuestra app.
+    #firewalls => define las formas de autenticarse dentro de las rutas de nuestra app.
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -26,6 +26,7 @@ security:
                 check_path: /login
             logout:
                 path: app_logout
+            user_checker: App\Security\UserChecker
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

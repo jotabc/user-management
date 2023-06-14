@@ -33,7 +33,7 @@
 
   Cuando iniciamos sessión nos genera una coockie
 
-Logout.- PAsos:
+Logout.- Pasos:
 1) Creamos en nuestro security firewall main colocamos la opción logout con el path app_logout
   main:
     logout:
@@ -44,4 +44,24 @@ Logout.- PAsos:
    - composer require form validator => validador
    - bin/console make:registration-form => bundle
    
-  
+!!! VALIDACIÓN DE CUENTA !!!.- Esto nos ayuda a no crear cuentas falsas con correos falsos y que ingresen a nuestro sistema:
+
+1) Instalamos:
+    - composer require symfony/mailer
+    - composer require symfony/google-mailer
+    
+2) Tenemos que configurar nuestras variables de google que tengamos cuenta para poder hacer pruebas de envios de correos. .env => MAILER_DSN=gmail://USERNAME:PASSWORD@default
+
+3) Tenemos que instalarnos un bundle que es el que se va a encargar de verificar la email de ese usuario
+    - composer require symfonycasts/verify-email-bundle
+    NOTA.- debemos de lanzar de nuevo el comando de => bin/console make:registration-form para que nos vuelva a crear el form de registro pero ahora con la opcion de poder enviar la email al usuario que se registro.
+
+4) Creamos un custom user checked para que nos permita a nosotros que el usuario no pueda iniciar session si no ha verificado la email. Lo creamos dentro de la carpeta Security/UserChecker.php
+
+5) Debemos en el security.yaml dentro de nuestro firewall main añadimos el user checked que queremos usar, solo nos permite un solo userChecked por lo cual dentro de esta clase UserVerified deben de ir todas la excepciones que podamos y queremos meter ahí. ejm ===>
+  security.yaml
+  firewall:
+    ..rest of code
+    logout:
+      path: app_logout
+    user_checker: App\Security\UserChecker => here
