@@ -65,3 +65,18 @@ Logout.- Pasos:
     logout:
       path: app_logout
     user_checker: App\Security\UserChecker => here
+
+!!! RECUPERAR CONTRASEÑA !!!.- Tenemos un bundlde también que se encarga de todo esto del recupero de la contraseña pasos:
+1) Instalamos el bundle 
+   - composer require symfonycasts/reset-password-bundle
+   Este instala las recetas de flex necesarias.
+
+2) Ahora lanzamos el sig comando para que genere el formulario para esto.
+   - bin/console make:reset-password
+
+3) Luego responder las preguntas, nos pide que realicemos unos pasos:
+   - Crear y lanzar la migración bin/console make:migration(crea)  => bin/console d:m:m(lanza)
+   - Revisar el form en src/Form que genero dos clases para poder customizar si queremos las validaciones y labes.
+   - Revisar y customizar los templates que genero de twig => templates/reset_password aqui están algunos template que me genero el comando revisar los que creo si queremos customizarlos.
+   - Asegurarnos que nuestros MAILER_DNS, o cuenta que usamos para enviar los correos este correctamente configurada.
+   - Crear un link "forgot your password" que apunte a la ruta app_forgot_password_request en el formulario de login que tenemos.
