@@ -80,3 +80,56 @@ Logout.- Pasos:
    - Revisar y customizar los templates que genero de twig => templates/reset_password aqui están algunos template que me genero el comando revisar los que creo si queremos customizarlos.
    - Asegurarnos que nuestros MAILER_DNS, o cuenta que usamos para enviar los correos este correctamente configurada.
    - Crear un link "forgot your password" que apunte a la ruta app_forgot_password_request en el formulario de login que tenemos.
+
+!!! JWT !!!.- Vamos a trabajar con un bundle lexikJWTAuthenticationBundle pasos:
+1) Instalamos el bundle 
+   - composer require "lexik/jwt-authentication-bundle" 
+   Esto también gracias a las recetas de flex este ya nos coloca la config básica que necesitamos.
+
+2) Nos genera en nuestro archivo env 3 variables de entorno que symfony
+   - el archivo con la clave secreta
+   - el archivo con la clave pública
+   - la frase con la que se vana firmar ellos.
+   Para generar esos archivos de la clave privada y pública debemos de lanzar el sig comando
+   - bin/console lexik:jwt:generate-keypair
+
+3) En el security.yaml debemos de registrar esta forma de auth añadiendo un nuevo firewall con cualquier nombre en este caso api_login ejm
+
+  firewalls:
+    main:
+      ...rest_of_code
+    app_login:
+      pattern: ^/api/login
+      stateless: true => no alamacena la sesion
+      json_login: => definimos las propiedades para definit como nos vamos a authenticar. login mediante json
+          check_path: /api/login_check => path donde se va a generar el chequeo de usuario y contraseña
+          success_handler: lexik_jwt_authentication.handler.authentication_success => gestiona el proceso de exito
+          failure_handler: lexik_jwt_authentication.handler.authentication_failure => gestiona el proceso de exito
+
+4) Crear otro firewall al cual esta asociado nuestra api ejm
+    json_login:
+      ...rest_of_code
+    app_login:
+        pattern: ^/api/login
+        stateless: true
+        json_login:
+            check_path: /api/login_check
+            success_handler: lexik_jwt_authentication.handler.authentication_success
+            failure_handler: lexik_jwt_authentication.handler.authentication_failure
+      api: => En este firewall está el cambio.
+        pattern: ^/api
+        stateless: true
+        jwt: ~
+
+5) Luego tenemos que configurar nuestro access control en el mismo security de la sig manera:
+    access_control:
+      - { path: '^/profile', roles: 'ROLE_USER' }
+      ...rest_of_code
+      - { path: '^/api/login', roles: 'PUBLIC_ACCESS' } => todos acceden al login.
+      - { path: '^/api', roles: 'IS_AUTHENTICATED_FULLY' } => resto path api este autenticato por completo
+
+6) Nos vamos al archivo config/routes.yaml y configuramos ese path de check login que creamos en nuestro firewall
+  api_login_check:
+    path: /api/login_check
+
+OJO.- symfony cuando decide que firewall usar lo que hace es irlo recorriendo en orden y el primero que funciona es el que va usar, osea el no va a buscar el que sea más exacto.
