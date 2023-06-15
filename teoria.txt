@@ -133,3 +133,30 @@ Logout.- Pasos:
     path: /api/login_check
 
 OJO.- symfony cuando decide que firewall usar lo que hace es irlo recorriendo en orden y el primero que funciona es el que va usar, osea el no va a buscar el que sea más exacto.
+
+!!! USER ROLES !!!.- 
+
+Lo primero que vamos aha hacer es limitar los ataques de fuerza bruta, es decir, si un usuario intenta intriducir varias veces un usuario y contraseña varias veces de forma erronea hasta intentar adivinar la contraseña pues le baneemos mediante IP durante un tiempo determinado, de modo que tengamos es epuntito extra de seguridad en nuestra app. Pasos
+1) composer require symfony/rate-limiter
+
+2) En nuestro security.yaml debemos de agregar esta protección en el firewall main
+   main:
+    ...rest_of_code
+    login_throttling:
+      max_attempts: 3
+      interval: '15 minutes'
+
+ROLES.- Los roles user cuando creamos la entity user con maker el por si solo ya nos coloca por defecto el role user a todos lo que se registran. Vamos a permitir diff roles en nuetsra app dependiendo los roles por ejm podrá entar al admin o a alguna parte de nuestra app. PAsos:
+
+1) En nuestro security.yaml debemos de habilitar la gerarquía de roles debajo de nuestros password_hashers
+    password_hashers:
+      ...rest_of_code
+    role_hierarchy:
+    // hereda el rol user también, le que tenga el rol admin siempre tiene que tener el rol user
+      ROLE_ADMIN: ROLE_USER
+      ROLE_SUPER_ADMIN: [ROLE_ADMIN]
+
+2) Ahora ya agregando esto podemos nosotros protejer las rutas en el access control.
+    access_control:
+      - { path: ^/super_admin, roles: ROLE_SUPER_ADMIN }
+      - { path: ^/api/login, roles: PUBLIC_ACCESS }
